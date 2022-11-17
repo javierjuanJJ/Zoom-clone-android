@@ -14,15 +14,21 @@
         tools:replace="android:allowBackup"
         tools:targetApi="31">
         <activity
+            android:name=".HomeActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".WaitJoinActivity"
-            android:icon="@drawable/ic_launcher_foreground"
-            android:exported="true">
-
+            android:exported="true"
+            android:icon="@drawable/ic_launcher_foreground">
             <intent-filter>
-                <action android:name="whatsappclone.proyecto_javier_juan_uceda.zoomcloneandroid.intent.action.JoinBeforeHost"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-            </intent-filter>
+                <action android:name="whatsappclone.proyecto_javier_juan_uceda.zoomcloneandroid.intent.action.JoinBeforeHost" />
 
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".MainActivity"
