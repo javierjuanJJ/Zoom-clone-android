@@ -5,33 +5,31 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import com.google.android.exoplayer2.util.Log;
 
 import org.jetbrains.annotations.NotNull;
 
 import us.zoom.sdk.JoinMeetingOptions;
 import us.zoom.sdk.JoinMeetingParams;
 import us.zoom.sdk.MeetingError;
-import us.zoom.sdk.MeetingParameter;
 import us.zoom.sdk.MeetingService;
 import us.zoom.sdk.MeetingServiceListener;
 import us.zoom.sdk.MeetingStatus;
 import us.zoom.sdk.StartMeetingOptions;
-import us.zoom.sdk.StartMeetingParams;
-import us.zoom.sdk.StartMeetingParams4NormalUser;
 import us.zoom.sdk.StartMeetingParamsWithoutLogin;
+import us.zoom.sdk.ZoomApiError;
+import us.zoom.sdk.ZoomAuthenticationError;
 import us.zoom.sdk.ZoomSDK;
 import us.zoom.sdk.ZoomSDKAuthenticationListener;
 import us.zoom.sdk.ZoomSDKInitParams;
 import us.zoom.sdk.ZoomSDKInitializeListener;
 
 
-public class MainActivity extends AppCompatActivity implements MeetingServiceListener {
+public class MainActivity extends AppCompatActivity implements MeetingServiceListener, ZoomSDKAuthenticationListener {
 
 
 //    private static final String ZAK = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOm51bGwsImlzcyI6IldhTVFYSzRCVHFHMEJtTWZRRjNBMVEiLCJleHAiOjE2NjkyODA2NDEsImlhdCI6MTY2ODY3NTg0N30.hw6X-RLdIyExve_pXJg5IrTS6l9NMPPil71MtZKHh2Q";
@@ -95,7 +93,7 @@ private static final String ZAK = "pF6iqSV2STKQPLyqdXzGCw";
                         String email = etEmail.getText().toString();
                         String password = etPassword.getText().toString();
 
-                        login();
+                        login(email, password);
                     }
                 } catch (Exception e) {
 
@@ -106,9 +104,15 @@ private static final String ZAK = "pF6iqSV2STKQPLyqdXzGCw";
         initializeZoom(this);
     }
 
-    private void login() {
+    private void login(String email, String password) {
         //int result = getInstance().loginWithZoom(email, password);
-        startMeeting(etMeetingNumber.getText().toString(),MainActivity.this, this,ZAK);
+        //startMeeting(etMeetingNumber.getText().toString(),MainActivity.this, this,ZAK);
+
+        int result = ZoomSDK.getInstance().loginWithZoom(email, password);
+
+        if (result == ZoomApiError.ZOOM_API_ERROR_SUCCESS){
+            ZoomSDK.getInstance().addAuthenticationListener(this);
+        }
 
     }
 
@@ -204,7 +208,9 @@ private static final String ZAK = "pF6iqSV2STKQPLyqdXzGCw";
     }
 
     private void Home() {
-        startActivity(new Intent(MainActivity.this, HomeActivity.class));
+        if (ZoomSDK.getInstance().isLoggedIn()) {
+            startActivity(new Intent(MainActivity.this, HomeActivity.class));
+        }
     }
 
     @Override
@@ -213,7 +219,24 @@ private static final String ZAK = "pF6iqSV2STKQPLyqdXzGCw";
     }
 
     @Override
-    public void onMeetingParameterNotification(MeetingParameter meetingParameter) {
+    public void onZoomSDKLoginResult(long l) {
+        if (l == ZoomAuthenticationError.ZOOM_AUTH_ERROR_SUCCESS){
+            Home();
+        }
+    }
+
+    @Override
+    public void onZoomSDKLogoutResult(long l) {
+
+    }
+
+    @Override
+    public void onZoomIdentityExpired() {
+
+    }
+
+    @Override
+    public void onZoomAuthIdentityExpired() {
 
     }
 }
