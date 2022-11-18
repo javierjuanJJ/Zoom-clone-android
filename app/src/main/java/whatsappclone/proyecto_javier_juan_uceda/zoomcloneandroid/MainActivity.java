@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements MeetingServiceLis
 private static final String ZAK = "pF6iqSV2STKQPLyqdXzGCw";
 
 
-    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String TAG = MainActivity.class.getSimpleName() + " Own";
     private EditText etTextPersonName, etMeetingNumber, etMeetingPassword, etEmail, etPassword;
     private Button btnJoinMeeting, btnLogIn;
 
@@ -124,9 +124,13 @@ private static final String ZAK = "pF6iqSV2STKQPLyqdXzGCw";
             Log.i(TAG, "MeetingError.MEETING_ERROR_SUCCESS");
         }
         else {
-            Home();
+            // Home();
+
+
+            int instantMeeting = meetingService.startInstantMeeting(this, new StartMeetingOptions());
 
             Log.i(TAG, "MeetingError.MEETING_ERROR_SUCCESS");
+            Log.i(TAG, String.valueOf(instantMeeting));
         }
     }
 

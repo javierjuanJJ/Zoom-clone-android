@@ -8,17 +8,4 @@ import us.zoom.sdk.ZoomSDK
 
 class ZoomMeetingOwn {
 
-
-    fun startMeeting(meetingNumber: String, context: Context, meetingServiceListener: us.zoom.sdk.MeetingServiceListener, zak: String) {
-        val meetingService = ZoomSDK.getInstance().meetingService
-        val startParams = StartMeetingParamsWithoutLogin().apply {
-            zoomAccessToken = zak
-            meetingNo = meetingNumber
-        }
-        meetingService.addListener(meetingServiceListener)
-        val result = meetingService.startMeetingWithParams(context, startParams, StartMeetingOptions())
-        if (result == MeetingError.MEETING_ERROR_SUCCESS) {
-            // The SDK will attempt to join the meeting.
-        }
-    }
 }
